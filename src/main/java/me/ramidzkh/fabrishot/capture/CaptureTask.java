@@ -24,8 +24,8 @@
 
 package me.ramidzkh.fabrishot.capture;
 
-import me.ramidzkh.fabrishot.config.Config;
 import me.ramidzkh.fabrishot.MinecraftInterface;
+import me.ramidzkh.fabrishot.config.Config;
 
 import java.nio.file.Path;
 
@@ -46,33 +46,30 @@ public class CaptureTask {
     }
 
     public boolean onRenderTick() throws Exception {
-        switch (frame) {
-            // override viewport size (the following frame will be black)
-            case 0:
-                displayWidth = MinecraftInterface.getDisplayWidth();
-                displayHeight = MinecraftInterface.getDisplayHeight();
+        // override viewport size (the following frame will be black)
+        if (frame == 0) {
+            displayWidth = MinecraftInterface.getDisplayWidth();
+            displayHeight = MinecraftInterface.getDisplayHeight();
 
-                int width = Config.CAPTURE_WIDTH;
-                int height = Config.CAPTURE_HEIGHT;
+            int width = Config.CAPTURE_WIDTH;
+            int height = Config.CAPTURE_HEIGHT;
 
-                // resize viewport/framebuffer
-                MinecraftInterface.resize(width, height);
-                break;
-
+            // resize viewport/framebuffer
+            MinecraftInterface.resize(width, height);
+        } else if (frame >= Config.DELAY) {
             // capture screenshot and restore viewport size
-            case 3:
-                try {
-                    FramebufferCapturer fbc = new FramebufferCapturer();
-                    FramebufferWriter fbw = new FramebufferWriter(file, fbc);
-                    fbw.write();
-                } finally {
-                    // restore viewport/framebuffer
-                    MinecraftInterface.resize(displayWidth, displayHeight);
-                }
-                break;
+            try {
+                FramebufferCapturer fbc = new FramebufferCapturer();
+                FramebufferWriter fbw = new FramebufferWriter(file, fbc);
+                fbw.write();
+            } finally {
+                // restore viewport/framebuffer
+                MinecraftInterface.resize(displayWidth, displayHeight);
+            }
+
+            return true;
         }
 
-        frame++;
-        return frame > 3;
+        return frame++ >= Config.DELAY;
     }
 }

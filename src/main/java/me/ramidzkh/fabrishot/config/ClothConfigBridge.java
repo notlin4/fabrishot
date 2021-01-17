@@ -50,6 +50,7 @@ public class ClothConfigBridge implements ConfigScreenFactory<Screen> {
                     properties.put("override_screenshot_key", String.valueOf(Config.OVERRIDE_SCREENSHOT_KEY));
                     properties.put("width", String.valueOf(Config.CAPTURE_WIDTH));
                     properties.put("height", String.valueOf(Config.CAPTURE_HEIGHT));
+                    properties.put("delay", String.valueOf(Config.DELAY));
 
                     try (BufferedWriter writer = Files.newBufferedWriter(FabricLoader.getInstance().getConfigDir().resolve("fabrishot.properties"))) {
                         properties.store(writer, "Fabrishot");
@@ -78,6 +79,13 @@ public class ClothConfigBridge implements ConfigScreenFactory<Screen> {
                 .setMin(1)
                 .setMax(65535)
                 .setSaveConsumer(i -> Config.CAPTURE_HEIGHT = i)
+                .build());
+
+        category.addEntry(entryBuilder.startIntField(new TranslatableText("fabrishot.config.delay"), Config.DELAY)
+                .setDefaultValue(3)
+                .setMin(3)
+                .setMax(100000)
+                .setSaveConsumer(i -> Config.DELAY = i)
                 .build());
         return builder.build();
     }

@@ -4,5 +4,6 @@
   "fabrishot.config.override_screenshot_key": "Override normal screenshot with Fabrishot",
   "fabrishot.config.width": "Screenshot width",
   "fabrishot.config.height": "Screenshot height",
+  "fabrishot.config.delay": "Delay (in frames)",
   "key.fabrishot.screenshot": "Take large screenshot"
 }
